@@ -1,78 +1,39 @@
 <template>
   <div class="container">
     <global-header :user="user"></global-header>
-    <column-list :list="list"></column-list>
-    <validate-form @form-submit="onFormSubmit">
-    <validate-input :rules="rules1" v-model="emailVal" type="text"></validate-input>
-    <validate-input :rules="rules2" v-model="passwordVal" type="password"></validate-input>
-    </validate-form>
+    <router-view></router-view>
+    <footer class="text-center py-4 text-secondary bg-light mt-6">
+      <small>
+        <ul class="list-inline mb-0">
+          <li class="list-inline-item">© 2020 者也专栏</li>
+          <li class="list-inline-item">课程</li>
+          <li class="list-inline-item">文档</li>
+          <li class="list-inline-item">联系</li>
+          <li class="list-inline-item">更多</li>
+        </ul>
+      </small>
+    </footer>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref,reactive } from "vue";
-import 'bootstrap/dist/css/bootstrap.min.css'
-import ColumnList, { ColumnListProps } from "@/components/ColumnList.vue";
-import GlobalHeader,{UserProps} from '@/components/GlobalHeader.vue'
-import ValidateInput,{RulesProps} from "./components/validateInput.vue";
-import validateForm from '@/components/validateForm.vue'
-const currentUser:UserProps={
-  isLogin:true,
-  name:"vv"
-}
-const testList: ColumnListProps[] = [
-  {
-    id: "123",
-    avatar: "https://baike.baidu.com/pic/Vue.js/19884851/1/43a7d933c895d143b1a710bb7df082025baf0750?fr=lemma&ct=single#aid=1&pic=43a7d933c895d143b1a710bb7df082025baf0750",
-    title: "123",
-    description: "qqqqqqq",
-  },
-  {
-    id: "123",
-    avatar: "https://baike.baidu.com/pic/Vue.js/19884851/1/43a7d933c895d143b1a710bb7df082025baf0750?fr=lemma&ct=single#aid=1&pic=43a7d933c895d143b1a710bb7df082025baf0750",
-    title: "123",
-    description: "qqqqqqq",
-  },
-  {
-    id: "123",
-    avatar: "",
-    title: "123",
-    description: "qqqqqqq",
-  },
-  {
-    id: "123",
-    avatar: "https://baike.baidu.com/pic/Vue.js/19884851/1/43a7d933c895d143b1a710bb7df082025baf0750?fr=lemma&ct=single#aid=1&pic=43a7d933c895d143b1a710bb7df082025baf0750",
-    title: "123",
-    description: "qqqqqqq",
-  },
-];
+import { defineComponent, ref, reactive, computed } from "vue";
+import { useStore } from "vuex";
+import { DataProps } from "./store";
+import "bootstrap/dist/css/bootstrap.min.css";
+import GlobalHeader from "@/components/GlobalHeader.vue";
 export default defineComponent({
   name: "App",
   components: {
-    ColumnList,GlobalHeader,
-    ValidateInput,validateForm
+    GlobalHeader,
   },
   setup() {
-    const rules1:RulesProps=[
-      {type:"required",message:"输入值不能为空"},
-      {type:"email",message:"输入邮箱格式不正确"}
-    ]
-    const rules2:RulesProps=[
-      {type:"required",message:"输入值不能为空"},
-    ]
-    const emailVal=ref('')
-    const paddwordVal=ref('')
-    const inputRef=reactive({
-      message:"",
-      error:false,
-      val:""
-    })
-    const onFormSubmit=(result:boolean)=>{
-      console.log('result',result)
-    }
+    const store = useStore<DataProps>();
+    const user = computed(() => {
+     return store.state.user
+    });
     return {
-      list:testList,
-      user:currentUser,rules1,rules2,emailVal,paddwordVal,onFormSubmit
+      user,
     };
   },
 });
@@ -85,6 +46,5 @@ export default defineComponent({
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
