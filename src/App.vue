@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <loading v-if="isLoading"></loading>
     <global-header :user="user"></global-header>
     <router-view></router-view>
     <footer class="text-center py-4 text-secondary bg-light mt-6">
@@ -22,18 +23,20 @@ import { useStore } from "vuex";
 import { DataProps } from "./store";
 import "bootstrap/dist/css/bootstrap.min.css";
 import GlobalHeader from "@/components/GlobalHeader.vue";
+import Loading from '@/components/Loading.vue'
 export default defineComponent({
   name: "App",
   components: {
-    GlobalHeader,
+    GlobalHeader,Loading
   },
   setup() {
     const store = useStore<DataProps>();
+    const isLoading=computed(()=>store.state.isLoading)
     const user = computed(() => {
      return store.state.user
     });
     return {
-      user,
+      user,isLoading
     };
   },
 });

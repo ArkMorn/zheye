@@ -23,16 +23,20 @@
 </template>
 
 <script lang='ts'>
-import {defineComponent} from 'vue'
+import {defineComponent,onMounted,computed} from 'vue'
 import ColumnList from '@/components/ColumnList.vue'
 import {useStore} from 'vuex'
+import {DataProps} from '../store'
 export default defineComponent({
   components:{
     ColumnList
   },
   setup(){
-    const store=useStore()
-    const list=store.state.columns
+    const store=useStore<DataProps>()
+    onMounted(()=>{
+      store.dispatch('fetchColumns')
+    })
+    const list=computed(()=>store.state.columns)
     return {
       list
     }
